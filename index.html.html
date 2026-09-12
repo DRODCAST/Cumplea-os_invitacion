@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>58 — Noe Rodríguez Vázquez</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --void:#0d0a12;
+    --panel:#171220;
+    --panel-soft:#1e1828;
+    --gold:#c9a35c;
+    --gold-soft:#e3ca8f;
+    --wine:#5c1524;
+    --violet:#392a4d;
+    --cream:#efe4cf;
+    --muted:#9a8c9e;
+    --rule: rgba(201,163,92,0.35);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse at 50% -10%, rgba(92,21,36,0.35), transparent 55%),
+      radial-gradient(ellipse at 90% 100%, rgba(57,42,77,0.35), transparent 50%),
+      var(--void);
+    color:var(--cream);
+    font-family:'Jost', sans-serif;
+    font-weight:300;
+    letter-spacing:0.02em;
+    min-height:100vh;
+    overflow-x:hidden;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+  }
+
+  /* ---------- Reveal overlay ---------- */
+  #veil{
+    position:fixed; inset:0; z-index:50;
+    background: radial-gradient(circle at 50% 42%, #241a2e 0%, #0d0a12 70%);
+    display:flex; align-items:center; justify-content:center;
+    transition: clip-path 1.1s cubic-bezier(.65,0,.35,1), opacity .6s ease .5s;
+    clip-path: circle(150% at 50% 50%);
+  }
+  #veil.open{
+    clip-path: circle(0% at 50% 42%);
+    opacity:0;
+    pointer-events:none;
+  }
+  .keyhole-btn{
+    background:none; border:1px solid var(--rule);
+    color:var(--gold-soft); font-family:'Jost',sans-serif;
+    font-size:0.78rem; letter-spacing:0.18em;
+    padding:16px 30px; border-radius:2px;
+    cursor:pointer; text-transform:none;
+    display:flex; flex-direction:column; align-items:center; gap:18px;
+    transition: border-color .3s ease, color .3s ease;
+  }
+  .keyhole-btn:hover{ border-color:var(--gold); color:var(--gold);}
+  .keyhole-svg{ width:46px; height:64px; }
+  .keyhole-svg circle, .keyhole-svg path{ stroke:var(--gold); }
+
+  /* ---------- Layout ---------- */
+  main{
+    max-width:600px; margin:0 auto; padding:0 28px 10px;
+  }
+  section{ padding:80px 0; border-bottom:1px solid var(--rule); }
+  section:last-of-type{ border-bottom:none; }
+
+  .eyebrow{
+    font-family:'Cormorant Garamond', serif; font-style:italic; font-size:1.05rem;
+    color:var(--muted); text-align:center; margin:0 0 6px;
+  }
+
+  /* Hero */
+  .hero{ text-align:center; padding-top:64px; }
+  .hero .num{
+    font-family:'Cormorant Garamond', serif; font-weight:600;
+    font-size:clamp(6rem, 26vw, 9.5rem); line-height:0.85; color:var(--gold);
+    text-shadow:0 0 40px rgba(201,163,92,0.25);
+    margin:0;
+  }
+  .hero .name{
+    font-family:'Cormorant Garamond', serif; font-size:clamp(1.6rem,5vw,2.3rem);
+    letter-spacing:0.08em; margin:18px 0 10px; color:var(--cream);
+  }
+  .hero .tagline{
+    font-size:0.92rem; color:var(--muted); max-width:340px; margin:0 auto;
+    line-height:1.7;
+  }
+  .divider{
+    width:64px; height:1px; background:var(--rule); margin:34px auto;
+  }
+
+  h2.section-title{
+    font-family:'Cormorant Garamond', serif; font-weight:500; font-style:italic;
+    font-size:1.9rem; text-align:center; color:var(--gold-soft); margin:0 0 28px;
+  }
+  p.copy{
+    font-size:0.98rem; line-height:1.9; color:var(--cream); text-align:center;
+    max-width:440px; margin:0 auto;
+  }
+
+  /* Detalles */
+  .detail-row{
+    display:flex; justify-content:space-between; gap:20px;
+    padding:18px 0; border-top:1px solid var(--rule);
+  }
+  .detail-row:last-child{ border-bottom:1px solid var(--rule); }
+  .detail-label{ color:var(--muted); font-size:0.78rem; letter-spacing:0.1em; }
+  .detail-value{ color:var(--cream); font-size:0.98rem; text-align:right; max-width:270px; }
+  .map-btn{
+    display:inline-block; margin:26px auto 0; text-align:center;
+    border:1px solid var(--gold); color:var(--gold-soft); text-decoration:none;
+    padding:12px 26px; font-size:0.82rem; letter-spacing:0.12em; border-radius:2px;
+    transition:background .3s ease, color .3s ease;
+  }
+  .map-btn:hover{ background:var(--gold); color:var(--void); }
+  .center{ text-align:center; }
+
+  /* RSVP */
+  form.rsvp{ max-width:380px; margin:0 auto; display:flex; flex-direction:column; gap:16px; }
+  .field{ display:flex; flex-direction:column; gap:6px; }
+  label{ font-size:0.72rem; letter-spacing:0.1em; color:var(--muted); }
+  input, select{
+    background:var(--panel-soft); border:1px solid var(--rule); color:var(--cream);
+    padding:12px 14px; font-family:'Jost',sans-serif; font-size:0.95rem; border-radius:2px;
+    outline:none;
+  }
+  input:focus, select:focus{ border-color:var(--gold); }
+  .rsvp-actions{ display:flex; gap:12px; margin-top:6px; }
+  .btn{
+    flex:1; padding:13px; border-radius:2px; border:1px solid var(--gold);
+    background:transparent; color:var(--gold-soft); font-family:'Jost',sans-serif;
+    font-size:0.85rem; letter-spacing:0.08em; cursor:pointer;
+    transition:background .3s ease, color .3s ease;
+  }
+  .btn:hover{ background:var(--gold); color:var(--void); }
+  .btn.primary{ background:var(--wine); border-color:var(--wine); color:var(--cream); }
+  .btn.primary:hover{ background:#7a1c30; border-color:#7a1c30; color:var(--cream); }
+  .rsvp-msg{ text-align:center; font-size:0.9rem; color:var(--gold-soft); min-height:1.2em; }
+
+  /* Regalo */
+  .envelope{
+    width:60px; height:44px; margin:0 auto 22px; position:relative;
+  }
+  .envelope svg{ width:100%; height:100%; }
+
+  /* Música */
+  .music-toggle{
+    display:flex; align-items:center; justify-content:center; gap:14px;
+    margin:0 auto; width:fit-content; cursor:pointer;
+    border:1px solid var(--rule); padding:12px 22px; border-radius:30px;
+    color:var(--gold-soft); font-size:0.8rem; letter-spacing:0.1em;
+    transition:border-color .3s ease;
+  }
+  .music-toggle:hover{ border-color:var(--gold); }
+  .bars{ display:flex; align-items:flex-end; gap:3px; height:16px; }
+  .bars span{
+    width:3px; background:var(--gold); height:4px; border-radius:1px;
+    animation:none;
+  }
+  .music-toggle.playing .bars span{ animation:bar 0.9s ease-in-out infinite; }
+  .bars span:nth-child(1){ animation-delay:0s; }
+  .bars span:nth-child(2){ animation-delay:0.15s; }
+  .bars span:nth-child(3){ animation-delay:0.3s; }
+  @keyframes bar{ 0%,100%{ height:4px; } 50%{ height:16px; } }
+
+  /* Despedida */
+  .farewell{
+    text-align:center;
+  }
+  .signature{
+    font-family:'Cormorant Garamond', serif; font-style:italic; font-size:1.3rem;
+    color:var(--gold); margin-top:26px;
+  }
+  footer{ text-align:center; padding:34px 0 50px; color:var(--muted); font-size:0.72rem; letter-spacing:0.08em; }
+</style>
+</head>
+<body>
+
+<div id="veil">
+  <button class="keyhole-btn" onclick="document.getElementById('veil').classList.add('open')">
+    <svg class="keyhole-svg" viewBox="0 0 46 64" fill="none">
+      <circle cx="23" cy="20" r="13" stroke-width="1.3"/>
+      <path d="M15 34 L20 60 H26 L31 34 Z" stroke-width="1.3" fill="none" stroke-linejoin="round"/>
+    </svg>
+    DESCUBRE LA NOCHE
+  </button>
+</div>
+
+<main>
+
+  <section class="hero">
+    <p class="eyebrow">Guarda el secreto, reserva la fecha</p>
+    <p class="num">58</p>
+    <p class="name">Noe Rodríguez Vázquez</p>
+    <p class="tagline">Una noche entre luces bajas, buena compañía y un misterio que solo el tiempo sabe guardar.</p>
+  </section>
+
+  <section>
+    <h2 class="section-title">Una invitación, un secreto</h2>
+    <p class="copy">
+      Hay cumpleaños que se anuncian, y hay otros que se guardan como un buen enigma hasta el momento de descorchar la noche. Este es de los segundos. Te invitamos a formar parte de él.
+    </p>
+  </section>
+
+  <section>
+    <h2 class="section-title">Los detalles</h2>
+    <div class="detail-row">
+      <span class="detail-label">FECHA</span>
+      <span class="detail-value">Sábado 24 de octubre, 2026</span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-label">HORA</span>
+      <span class="detail-value">3:00 pm</span>
+    </div>
+    <div class="detail-row">
+      <span class="detail-label">LUGAR</span>
+      <span class="detail-value">Alondras, Las Aves<br>63170 Tepic, Nay.</span>
+    </div>
+    <div class="center">
+      <a class="map-btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Alondras%2C%20Las%20Aves%2C%2063170%20Tepic%2C%20Nay.">VER UBICACIÓN</a>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="section-title">Confirma tu lugar</h2>
+    <form class="rsvp" id="rsvpForm">
+      <div class="field">
+        <label for="nombre">Nombre completo</label>
+        <input type="text" id="nombre" required placeholder="Tu nombre">
+      </div>
+      <div class="field">
+        <label for="acompanantes">Número de acompañantes</label>
+        <select id="acompanantes">
+          <option value="0">Voy solo/a</option>
+          <option value="1">+1</option>
+          <option value="2">+2</option>
+          <option value="3">+3</option>
+        </select>
+      </div>
+      <div class="rsvp-actions">
+        <button type="button" class="btn" id="btnNo">No podré asistir</button>
+        <button type="button" class="btn primary" id="btnSi">Confirmo mi asistencia</button>
+      </div>
+      <p class="rsvp-msg" id="rsvpMsg"></p>
+    </form>
+  </section>
+
+  <section>
+    <h2 class="section-title">Un gesto, si así lo deseas</h2>
+    <div class="envelope">
+      <svg viewBox="0 0 60 44" fill="none">
+        <rect x="1" y="1" width="58" height="42" stroke="var(--gold)" stroke-width="1.2"/>
+        <path d="M1 1 L30 26 L59 1" stroke="var(--gold)" stroke-width="1.2"/>
+      </svg>
+    </div>
+    <p class="copy">
+      Tu presencia es, sin duda, el mejor regalo. Si además quieres sumarte a esta noche con un gesto adicional, una lluvia de sobres será recibida con mucho cariño.
+    </p>
+  </section>
+
+  <section>
+    <h2 class="section-title">Ambienta la espera</h2>
+    <p class="copy" style="margin-bottom:26px;">Dale play a la noche antes de que empiece.</p>
+    <div class="music-toggle" id="musicToggle">
+      <span class="bars"><span></span><span></span><span></span></span>
+      <span id="musicLabel">REPRODUCIR MÚSICA</span>
+    </div>
+    <audio id="audio" loop src="musica.mp3"></audio>
+  </section>
+
+  <section class="farewell">
+    <h2 class="section-title">Hasta pronto</h2>
+    <p class="copy">
+      Gracias por ser parte de esta historia. Nos vemos el 24 de octubre para celebrar, brindar y descubrir juntos de qué se trata todo este misterio.
+    </p>
+    <p class="signature">Con todo el cariño, familia Rodríguez Vázquez</p>
+  </section>
+
+  <footer>58 AÑOS · NOE RODRÍGUEZ VÁZQUEZ · 24.10.2026</footer>
+
+</main>
+
+<script>
+  // RSVP guardado en almacenamiento compartido del artefacto
+  async function guardarRSVP(estado){
+    const nombre = document.getElementById('nombre').value.trim();
+    const acompanantes = document.getElementById('acompanantes').value;
+    const msg = document.getElementById('rsvpMsg');
+    if(!nombre){
+      msg.textContent = 'Por favor escribe tu nombre.';
+      return;
+    }
+    const entry = { nombre, acompanantes, estado, fecha: new Date().toISOString() };
+    try{
+      const key = 'rsvp:' + nombre.toLowerCase().replace(/\s+/g,'-') + '-' + Date.now();
+      await window.storage.set(key, JSON.stringify(entry), true);
+      msg.textContent = estado === 'si'
+        ? '¡Gracias, ' + nombre.split(' ')[0] + '! Tu lugar está confirmado.'
+        : 'Gracias por avisar, ' + nombre.split(' ')[0] + '. Te extrañaremos.';
+    }catch(e){
+      msg.textContent = 'No se pudo guardar tu confirmación, intenta de nuevo.';
+    }
+  }
+  document.getElementById('btnSi').addEventListener('click', () => guardarRSVP('si'));
+  document.getElementById('btnNo').addEventListener('click', () => guardarRSVP('no'));
+
+  // Música
+  const audio = document.getElementById('audio');
+  const toggle = document.getElementById('musicToggle');
+  const label = document.getElementById('musicLabel');
+  let playing = false;
+  toggle.addEventListener('click', () => {
+    if(!playing){
+      audio.play().catch(()=>{});
+      toggle.classList.add('playing');
+      label.textContent = 'PAUSAR MÚSICA';
+    }else{
+      audio.pause();
+      toggle.classList.remove('playing');
+      label.textContent = 'REPRODUCIR MÚSICA';
+    }
+    playing = !playing;
+  });
+</script>
+
+</body>
+</html>
