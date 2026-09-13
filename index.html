@@ -324,7 +324,7 @@
 <p class="floating-player-hint" id="playerHint">Toca la foto<br>o desliza para iniciar</p>
 <div class="player-wrap">
   <div class="player-panel" id="playerPanel">
-    <div class="player-photo" id="playerPhoto" style="background-image:url('foto-cumple.jpg')"></div>
+    <div class="player-photo" id="playerPhoto"></div>
     <button class="icon-btn" id="playPauseBtn" title="Reproducir/Pausar">
       <svg id="iconPlay" viewBox="0 0 16 16"><path d="M3 1.5 L14 8 L3 14.5 Z"/></svg>
       <svg id="iconPause" viewBox="0 0 16 16" style="display:none;"><rect x="3" y="2" width="3.5" height="12"/><rect x="9.5" y="2" width="3.5" height="12"/></svg>
@@ -342,7 +342,14 @@
 <audio id="audio" loop></audio>
 
 <script>
-  // RSVP guardado en almacenamiento compartido del artefacto
+  // RSVP enviado directo al Google Form del usuario
+  const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSe9YM_17D7gLN91aaHiGgBRuecbrdOUX7KNnYilJCZM2Pc6zw/formResponse';
+  const ACOMPANANTES_TEXTO = {
+    '0': 'Opción voy solo/a',
+    '1': '1',
+    '2': '2',
+    '3': '3/+'
+  };
   async function guardarRSVP(estado){
     const nombre = document.getElementById('nombre').value.trim();
     const acompanantes = document.getElementById('acompanantes').value;
@@ -351,15 +358,17 @@
       msg.textContent = 'Por favor escribe tu nombre.';
       return;
     }
-    const entry = { nombre, acompanantes, estado, fecha: new Date().toISOString() };
+    const formData = new FormData();
+    formData.append('entry.1123114910', nombre);
+    formData.append('entry.40921303', ACOMPANANTES_TEXTO[acompanantes]);
+    formData.append('entry.1985719170', estado === 'si' ? 'Sí' : 'No');
     try{
-      const key = 'rsvp:' + nombre.toLowerCase().replace(/\s+/g,'-') + '-' + Date.now();
-      await window.storage.set(key, JSON.stringify(entry), true);
+      await fetch(GOOGLE_FORM_URL, { method: 'POST', mode: 'no-cors', body: formData });
       msg.textContent = estado === 'si'
         ? '¡Gracias, ' + nombre.split(' ')[0] + '! Tu lugar está confirmado.'
         : 'Gracias por avisar, ' + nombre.split(' ')[0] + '. Te extrañaremos.';
     }catch(e){
-      msg.textContent = 'No se pudo guardar tu confirmación, intenta de nuevo.';
+      msg.textContent = 'No se pudo enviar tu confirmación, intenta de nuevo.';
     }
   }
   document.getElementById('btnSi').addEventListener('click', () => guardarRSVP('si'));
@@ -391,13 +400,22 @@
     if(dx > 30 || dy > 30) openVeil();
   }, { passive:true });
 
-  // Reproductor: fotografía, play/pausa, siguiente canción
-  const tracks = ['musica-1.mp3', 'musica-2.mp3', 'musica-3.mp3'];
+  // Reproductor: cada canción tiene su propia foto
+  const tracks = [
+    { file: 'musica-1.mp3', photo: 'foto-1.JPG' },
+    { file: 'musica-2.mp3', photo: 'foto-2.jpg' },
+    { file: 'musica-3.mp3', photo: 'foto-3.jpg' }
+  ];
   let trackIndex = 0;
   const audio = document.getElementById('audio');
-  audio.src = tracks[trackIndex];
-
   const photo = document.getElementById('playerPhoto');
+
+  function loadTrack(index){
+    audio.src = tracks[index].file;
+    photo.style.backgroundImage = `url('${tracks[index].photo}')`;
+  }
+  loadTrack(trackIndex);
+
   const iconPlay = document.getElementById('iconPlay');
   const iconPause = document.getElementById('iconPause');
   const hint = document.getElementById('playerHint');
@@ -427,7 +445,7 @@
   document.getElementById('nextBtn').addEventListener('click', (e) => {
     e.stopPropagation();
     trackIndex = (trackIndex + 1) % tracks.length;
-    audio.src = tracks[trackIndex];
+    loadTrack(trackIndex);
     if(playing) audio.play().catch(()=>{});
   });
 
