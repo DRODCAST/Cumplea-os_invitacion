@@ -383,11 +383,7 @@
       <svg id="iconPlay" viewBox="0 0 16 16"><path d="M3 1.5 L14 8 L3 14.5 Z"/></svg>
       <svg id="iconPause" viewBox="0 0 16 16" style="display:none;"><rect x="3" y="2" width="3.5" height="12"/><rect x="9.5" y="2" width="3.5" height="12"/></svg>
     </button>
-    <button class="icon-btn" id="nextBtn" title="Siguiente canción"> audio.addEventListener('ended', () => {
-  trackIndex = (trackIndex + 1) % tracks.length;
-  loadTrack(trackIndex);
-  audio.play().catch(()=>{});
-});
+    <button class="icon-btn" id="nextBtn" title="Siguiente canción">
       <svg viewBox="0 0 16 16"><path d="M2 2 L10 8 L2 14 Z"/><rect x="12" y="2" width="2" height="12"/></svg>
     </button>
   </div>
