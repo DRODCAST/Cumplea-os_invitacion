@@ -295,7 +295,7 @@
       <span class="detail-value">C. Miñón Pte. 9, Centro<br>63000 Tepic, Nay.</span>
     </div>
     <div class="center">
-      <a class="map-btn" target="_blank" rel="noopener" href="https://maps.app.goo.gl/hyouXRREkUWexta5A">VER UBICACIÓN</a>
+      <a class="map-btn" target="_blank" rel="noopener" href="https://maps.app.goo.gl/rMUz636dDAHH12VC8">VER UBICACIÓN</a>
     </div>
   </section>
 
@@ -365,7 +365,6 @@
 
 </main>
 
-<p class="floating-player-hint" id="playerHint">Toca la foto<br>o desliza para iniciar</p>
 <div class="player-wrap">
   <div class="player-panel" id="playerPanel">
     <div class="player-photo" id="playerPhoto"></div>
@@ -426,17 +425,18 @@
     document.getElementById('giftReveal2').classList.toggle('open');
   });
 
-  // Velo: se abre al hacer click en cualquier parte, o al deslizar
+  // Velo: se abre al hacer click en cualquier parte, o al deslizar — e inicia la música
   const veil = document.getElementById('veil');
   let veilOpened = false;
   function openVeil(){
     if(veilOpened) return;
     veilOpened = true;
     veil.classList.add('open');
+    loadTrack(trackIndex);
+    setPlaying(true);
     setTimeout(() => {
       document.getElementById('playerToggle').classList.add('visible');
       document.getElementById('playerPanel').classList.add('visible');
-      document.getElementById('playerHint').classList.add('visible');
     }, 900);
   }
   veil.addEventListener('click', openVeil);
@@ -458,7 +458,7 @@
     { file: 'musica-2.mp3', photo: 'foto-2.jpg' },
     { file: 'musica-3.mp3', photo: 'foto-3.jpg' }
   ];
-  let trackIndex = 0;
+  let trackIndex = 2; // siempre abre con la música 3
   const audio = document.getElementById('audio');
   const photo = document.getElementById('playerPhoto');
 
@@ -470,7 +470,6 @@
 
   const iconPlay = document.getElementById('iconPlay');
   const iconPause = document.getElementById('iconPause');
-  const hint = document.getElementById('playerHint');
   let playing = false;
 
   function setPlaying(state){
@@ -486,7 +485,6 @@
       iconPlay.style.display = '';
       iconPause.style.display = 'none';
     }
-    hint.classList.remove('visible');
   }
 
   document.getElementById('playPauseBtn').addEventListener('click', (e) => {
