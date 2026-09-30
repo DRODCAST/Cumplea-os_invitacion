@@ -5,8 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cumpleaños 55 — Noe Rodríguez Vázquez</title>
 
-<!-- Vista previa al compartir (WhatsApp, Facebook, etc.) -->
-<!-- IMPORTANTE: reemplaza la URL de abajo por la de tu sitio ya publicado, ej: https://tu-usuario.github.io/tu-repositorio/portada.jpg -->
+<!-- Vista previa al compartir (WhatsApp, Facebook, etc.) — ya configurada con tu URL de GitHub Pages -->
 <meta property="og:title" content="Descubre una tarde Mágica — Noe Rodríguez Vázquez">
 <meta property="og:description" content="Guarda el secreto, reserva la fecha. Toca para descubrir la invitación.">
 <meta property="og:image" content="https://drodcast.github.io/Cumplea-os_invitacion/portada.jpg">
@@ -241,13 +240,6 @@
   .player-toggle.visible{ opacity:1; transform:scale(1); pointer-events:auto; }
   .player-toggle svg{ width:15px; height:15px; }
   .player-toggle svg path{ stroke:var(--gold); }
-  .floating-player-hint{
-    position:fixed; right:22px; bottom:78px; z-index:30;
-    font-size:0.66rem; letter-spacing:0.08em; color:var(--muted);
-    opacity:0; transition:opacity .6s ease .2s;
-    pointer-events:none; text-align:right; max-width:150px;
-  }
-  .floating-player-hint.visible{ opacity:1; }
 
   /* Despedida */
   .farewell{
@@ -393,10 +385,11 @@
     </svg>
   </div>
 </div>
-<audio id="audio" ></audio>
+<audio id="audio"></audio>
 
 <script>
   // RSVP enviado directo al Google Form del usuario
+  document.getElementById('rsvpForm').addEventListener('submit', (e) => e.preventDefault());
   const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSe9YM_17D7gLN91aaHiGgBRuecbrdOUX7KNnYilJCZM2Pc6zw/formResponse';
   const ACOMPANANTES_TEXTO = {
     '0': 'Opción voy solo/a',
@@ -467,9 +460,10 @@
   const tracks = [
     { file: 'musica-1.mp3', photo: 'foto-1.JPG' },
     { file: 'musica-2.mp3', photo: 'foto-2.jpg' },
-    { file: 'musica-3.mp3', photo: 'foto-3.jpg' }
+    { file: 'musica-3.mp3', photo: 'foto-3.jpg' },
+    { file: 'musica-4.mp3', photo: 'foto-4.jpg' }
   ];
-  let trackIndex = 2; // siempre abre con la música 3
+  let trackIndex = 3; // siempre abre con la música 4
   const audio = document.getElementById('audio');
   const photo = document.getElementById('playerPhoto');
 
@@ -484,14 +478,20 @@
   let playing = false;
 
   function setPlaying(state){
-    playing = state;
-    if(playing){
-      audio.play().catch(()=>{});
-      photo.classList.add('spinning');
-      iconPlay.style.display = 'none';
-      iconPause.style.display = '';
+    if(state){
+      audio.play().then(() => {
+        playing = true;
+        photo.classList.add('spinning');
+        iconPlay.style.display = 'none';
+        iconPause.style.display = '';
+      }).catch(() => {
+        // El navegador bloqueó la reproducción automática; queda listo
+        // para intentarlo de nuevo con el próximo toque o deslizamiento.
+        playing = false;
+      });
     }else{
       audio.pause();
+      playing = false;
       photo.classList.remove('spinning');
       iconPlay.style.display = '';
       iconPause.style.display = 'none';
@@ -508,6 +508,13 @@
     trackIndex = (trackIndex + 1) % tracks.length;
     loadTrack(trackIndex);
     if(playing) audio.play().catch(()=>{});
+  });
+
+  // Al terminar una canción, pasa sola a la siguiente y sigue sonando
+  audio.addEventListener('ended', () => {
+    trackIndex = (trackIndex + 1) % tracks.length;
+    loadTrack(trackIndex);
+    audio.play().catch(()=>{});
   });
 
   // Botón que muestra/oculta el panel del reproductor; este botón nunca desaparece
