@@ -517,6 +517,18 @@
     audio.play().catch(()=>{});
   });
 
+  // Si una pista falla al cargar (ej. nombre de archivo incorrecto),
+  // saltar automáticamente a la siguiente en vez de quedarse en silencio.
+  let trackErrorAttempts = 0;
+  audio.addEventListener('error', () => {
+    trackErrorAttempts++;
+    if(trackErrorAttempts >= tracks.length) return; // evita bucle infinito si faltan todas
+    trackIndex = (trackIndex + 1) % tracks.length;
+    loadTrack(trackIndex);
+    setPlaying(true);
+  });
+  audio.addEventListener('playing', () => { trackErrorAttempts = 0; });
+
   // Botón que muestra/oculta el panel del reproductor; este botón nunca desaparece
   document.getElementById('playerToggle').addEventListener('click', () => {
     document.getElementById('playerPanel').classList.toggle('visible');
@@ -534,6 +546,11 @@
     const dy = Math.abs(e.touches[0].clientY - touchStartY);
     if(dx > 40 || dy > 40) setPlaying(true);
   }, { passive:true });
+
+  // Respaldo: un clic con el mouse en cualquier parte también reintenta la música
+  document.addEventListener('click', () => {
+    if(veilOpened && !playing) setPlaying(true);
+  });
 </script>
 
 </body>
